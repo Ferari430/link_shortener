@@ -23,7 +23,7 @@ func app() http.Handler {
 
 	// DB
 	Db := db.NewDb(conf)
-
+	time.Sleep(5 * time.Second)
 	//REPO
 	LinkRepository := link.NewLinkRepository(Db)
 	UserRepository := user.NewUserRepository(Db)
@@ -46,7 +46,6 @@ func app() http.Handler {
 }
 
 func main() {
-
 	app := app()
 
 	server := http.Server{
