@@ -54,7 +54,7 @@ func main() {
 		Handler: app,
 	}
 
-	log.Println("Server started in port 8080") 
+	log.Println("Server started in port 8080")
 	go func() {
 		err := server.ListenAndServe()
 		if err != nil {
