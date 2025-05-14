@@ -19,38 +19,45 @@ import (
 	"gorm.io/gorm"
 )
 
-//todo1: Сделать отдельный модель для инициализации тестовой бд с методами initData removeData
+//todo1: Сделать отдельный модуль для инициализации тестовой бд с методами initData removeData
 
 func initDb() *gorm.DB {
 	err := godotenv.Load(".env")
 	if err != nil {
-		log.Printf("Cant123 %v", err.Error())
+		log.Printf("Cant %v", err.Error())
 	}
 
 	db, err := gorm.Open(postgres.Open(os.Getenv("DSN")), &gorm.Config{})
 
 	if err != nil {
-		panic("Cant connect to DB in auto")
+		panic("Cant connect to test DB in auto")
 	}
-	log.Println("Database connected")
-
+	log.Println("Test database connected")
 	return db
 
 }
 
 func initData(db *gorm.DB) {
-	db.Create(&user.User{
+	result := db.Create(&user.User{
 		Email:    "a35643@a.ru",
 		Password: "$2a$10$4lCSnfg1F18fjgmPUntOZ.DyE5jBCcicq2xCM.yC.2VcmMm5Mmc3O",
 		Name:     "oleg",
 	})
 
+	if result.Error != nil {
+		log.Println(result.Error)
+	}
 }
 
 func removeData(db *gorm.DB) {
-	db.Unscoped().
+	result := db.Unscoped().
 		Where("email = ?", "a35643@a.ru").
 		Delete(&user.User{})
+
+	if result.Error != nil {
+		log.Println(result.Error)
+	}
+	log.Println("Removed rows:", result.RowsAffected)
 }
 
 func TestLoginSuccsess(t *testing.T) {
@@ -61,10 +68,12 @@ func TestLoginSuccsess(t *testing.T) {
 
 	data, err := json.Marshal(auth.LoginRequest{
 		Email:    "a35643@a.ru",
-		Password: "123",
+		Password: "123", // wrong pass
 	})
 
-	log.Fatalf("cant marshal body %v", err)
+	if err != nil {
+		t.Fatalf("cant marshal body %v", err)
+	}
 
 	res, err := http.Post(ts.URL+"/auth/login", "application/json", bytes.NewReader(data))
 	if err != nil {
