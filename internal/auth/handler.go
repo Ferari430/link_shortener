@@ -43,18 +43,17 @@ func (handler *AuthHandler) Login() http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusUnauthorized)
 			return
 		}
-
+		
 		token, err := jwt.NewJWT(handler.Config.Auth.Secret).Create(jwt.JWTData{Email: email})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
-
 		}
 
 		data := LoginResponce{
 			Token: token,
 		}
-		_ = data
+
 		res.Json(w, data, 200)
 		log.Println(email)
 

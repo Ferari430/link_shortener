@@ -29,6 +29,7 @@ func (service *AuthService) Login(email, password string) (string, error) {
 		log.Println("Password wrong")
 		return "", errors.New(ErrWrongCredetials)
 	}
+	
 	log.Println("Password correct")
 	return email, nil
 

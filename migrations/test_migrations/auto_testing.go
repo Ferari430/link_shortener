@@ -15,9 +15,9 @@ import (
 func main() {
 
 	defer log.Println("Migrations succses")
-	err := godotenv.Load(".env")
+	err := godotenv.Load("cmd/.env.test")
 	if err != nil {
-		log.Fatal("Cant ")
+		log.Fatal("Cant %v", err.Error())
 	}
 
 	db, err := gorm.Open(postgres.Open(os.Getenv("DSN")), &gorm.Config{})
