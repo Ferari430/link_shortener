@@ -30,7 +30,7 @@ func IsAuthed(next http.Handler, config *configs.Config) http.Handler {
 		}
 
 		token := parts[1]
-		isValid, data := jwt.NewJWT(config.Auth.Secret).Parse(token)
+		isValid, data := jwt.NewJWT(config.Auth.Secret).ParseToken(token)
 		if !isValid {
 			http.Error(w, "Invalid JWT token", 402)
 			return

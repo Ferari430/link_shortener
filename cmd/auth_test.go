@@ -24,7 +24,7 @@ import (
 func initDb() *gorm.DB {
 	err := godotenv.Load(".env")
 	if err != nil {
-		log.Printf("Cant %v", err.Error())
+		log.Fatalf("Cant %v", err.Error())
 	}
 
 	db, err := gorm.Open(postgres.Open(os.Getenv("DSN")), &gorm.Config{})

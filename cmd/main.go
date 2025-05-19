@@ -30,7 +30,6 @@ func app() http.Handler {
 	StatRepository := stat.NewStatRepository(Db)
 
 	AuthService := auth.NewAuthService(UserRepository)
-
 	//APPENDING HANDLERS IN ROUTER
 	auth.NewAuthHandler(router, auth.AuthHandlerDeps{Config: conf,
 		Auth: AuthService})
@@ -52,7 +51,6 @@ func main() {
 		Addr:    ":8080",
 		Handler: app,
 	}
-
 	log.Println("Server started in port 8080")
 	go func() {
 		err := server.ListenAndServe()
