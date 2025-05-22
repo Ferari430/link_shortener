@@ -7,7 +7,7 @@ import (
 
 func TestJwtCreate(t *testing.T) {
 
-	const email = "a@a.ru"
+	const email = "a123@a.ru"
 
 	jwtService := jwt.NewJWT("1223123213")
 

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"my_project/configs"
 	"my_project/db"
@@ -45,11 +46,11 @@ func app() http.Handler {
 }
 
 func main() {
-	app := app()
+	application := app()
 
 	server := http.Server{
 		Addr:    ":8080",
-		Handler: app,
+		Handler: application,
 	}
 	log.Println("Server started in port 8080")
 	go func() {
@@ -60,18 +61,15 @@ func main() {
 
 	}()
 
-	// Trying to code Gracefull shutdown
 	ch := make(chan (os.Signal), 1)
 	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
 
-	close := <-ch
-	if close != nil {
-		log.Println("SPOPPING")
-	}
+	<-ch
+	log.Println("SPOPPING")
 
-	// SOME FUNCTIONS
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
 
-	time.Sleep(1 * time.Second)
-	log.Println("Server gracefully  shutdown")
+	server.Shutdown(ctx)
 
 }
